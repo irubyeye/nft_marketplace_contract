@@ -210,6 +210,24 @@ export class SellItemCreated__Params {
   }
 }
 
+export class sellItemRetracted extends ethereum.Event {
+  get params(): sellItemRetracted__Params {
+    return new sellItemRetracted__Params(this);
+  }
+}
+
+export class sellItemRetracted__Params {
+  _event: sellItemRetracted;
+
+  constructor(event: sellItemRetracted) {
+    this._event = event;
+  }
+
+  get sellItemId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
 export class Marketplace__buyOrdersResult {
   value0: BigInt;
   value1: BigInt;
@@ -709,6 +727,36 @@ export class RetractBuyOrderCall__Outputs {
   _call: RetractBuyOrderCall;
 
   constructor(call: RetractBuyOrderCall) {
+    this._call = call;
+  }
+}
+
+export class RetractSellItemCall extends ethereum.Call {
+  get inputs(): RetractSellItemCall__Inputs {
+    return new RetractSellItemCall__Inputs(this);
+  }
+
+  get outputs(): RetractSellItemCall__Outputs {
+    return new RetractSellItemCall__Outputs(this);
+  }
+}
+
+export class RetractSellItemCall__Inputs {
+  _call: RetractSellItemCall;
+
+  constructor(call: RetractSellItemCall) {
+    this._call = call;
+  }
+
+  get _sellItemId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class RetractSellItemCall__Outputs {
+  _call: RetractSellItemCall;
+
+  constructor(call: RetractSellItemCall) {
     this._call = call;
   }
 }

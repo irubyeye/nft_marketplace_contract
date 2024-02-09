@@ -46,6 +46,10 @@ const config: HardhatUserConfig = {
         url: `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
       },
     },
+    localhost: {
+      chainId: 31337,
+      allowUnlimitedContractSize: true,
+    },
   },
 };
 

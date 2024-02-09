@@ -58,6 +58,8 @@ contract Marketplace is Ownable {
         uint256 orderPrice
     );
 
+    event sellItemRetracted(uint256 indexed sellItemId);
+
     event BuyOrderAccepted(uint256 indexed buyOrderId);
 
     event BuyOrderRejected(uint256 indexed buyOrderId);
@@ -182,6 +184,18 @@ contract Marketplace is Ownable {
         );
 
         emit BuyOrderAccepted(_buyOrderId);
+    }
+
+    function retractSellItem(uint256 _sellItemId) external {
+        SellItem memory sellItem = sellItems[_sellItemId];
+
+        require(sellItem.nftOwner == msg.sender, "Cannot manage this item!");
+
+        require(sellItem.isForSale, "This item has already sold or retracted.");
+
+        sellItems[_sellItemId].isForSale = false;
+
+        emit sellItemRetracted(_sellItemId);
     }
 
     function rejectBuyOrder(uint256 _buyOrderId) external {
