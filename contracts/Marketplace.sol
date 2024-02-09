@@ -57,17 +57,11 @@ contract Marketplace is Ownable {
         uint256 orderPrice
     );
 
-    event BuyOrderAccepted{
-        uint256 indexed buyOrderId;
-    }
+    event BuyOrderAccepted(uint256 indexed buyOrderId);
 
-    event BuyOrderRejected{
-        uint256 indexed buyOrderId;
-    }
+    event BuyOrderRejected(uint256 indexed buyOrderId);
 
-    event BuyOrderRetracted{
-        uint256 indexed buyOrderId;
-    }
+    event BuyOrderRetracted(uint256 indexed buyOrderId);
 
     constructor() Ownable(msg.sender) {}
 
