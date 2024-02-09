@@ -18,6 +18,7 @@ const COVERAGE = process.env.COVERAGE === "true";
 const ETHERSCAN_API_KEY: string = process.env.ETHERSCAN_API_KEY || "";
 
 const config: HardhatUserConfig = {
+  defaultNetwork: "hardhat",
   solidity: {
     compilers: [
       {
@@ -30,6 +31,9 @@ const config: HardhatUserConfig = {
         },
       },
     ],
+  },
+  namedAccounts: {
+    deployer: { default: 0 },
   },
   networks: {
     sepolia: {
