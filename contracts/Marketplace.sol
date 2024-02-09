@@ -7,10 +7,10 @@ contract Marketplace is Ownable {
     mapping(address => uint256) public balances;
     mapping(address => uint256) public lockedAmount;
 
-    SellOrder[] public sellOrders;
+    SellItem[] public sellItems;
     BuyOrder[] public buyOrders;
 
-    struct SellOrder {
+    struct SellItem {
         uint256 proposalId;
         uint256 tokenId;
         uint256 initPrice;
@@ -25,9 +25,10 @@ contract Marketplace is Ownable {
         uint256 proposedPrice;
         address buyer;
         bool isRejected;
+        bool isClosed;
     }
 
-    event SellOrderCreated(
+    event SellItemCreated(
         address indexed seller,
         address indexed tokenAddress,
         uint256 indexed tokenId,
@@ -41,6 +42,32 @@ contract Marketplace is Ownable {
         uint256 proposedPrice,
         uint256 buyOrderId
     );
+
+    event Buy(
+        address indexed buyer,
+        address indexed tokenAddress,
+        uint256 indexed tokenId,
+        uint256 orderPrice
+    );
+
+    event Sell(
+        address indexed seller,
+        address indexed tokenAddress,
+        uint256 indexed tokenId,
+        uint256 orderPrice
+    );
+
+    event BuyOrderAccepted{
+        uint256 indexed buyOrderId;
+    }
+
+    event BuyOrderRejected{
+        uint256 indexed buyOrderId;
+    }
+
+    event BuyOrderRetracted{
+        uint256 indexed buyOrderId;
+    }
 
     constructor() Ownable(msg.sender) {}
 
@@ -56,15 +83,15 @@ contract Marketplace is Ownable {
         lockedAmount[_addressToLock] -= _amount;
     }
 
-    function createSellOrder(
+    function createSellItem(
         address _tokenAddress,
         uint256 _tokenId,
         uint256 _initPrice
     ) external {
-        uint256 sellOrderId = sellOrders.length;
+        uint256 sellItemId = sellItems.length;
 
-        SellOrder memory newSellOrder = SellOrder(
-            sellOrderId,
+        SellItem memory newSellItem = SellItem(
+            sellItemId,
             _tokenId,
             _initPrice,
             msg.sender,
@@ -72,14 +99,14 @@ contract Marketplace is Ownable {
             true
         );
 
-        sellOrders.push(newSellOrder);
+        sellItems.push(newSellItem);
 
-        emit SellOrderCreated(
+        emit SellItemCreated(
             msg.sender,
             _tokenAddress,
             _tokenId,
             _initPrice,
-            sellOrderId
+            sellItemId
         );
     }
 
@@ -88,7 +115,7 @@ contract Marketplace is Ownable {
         uint256 _proposedPrice
     ) external payable {
         require(
-            sellOrders[_sellOrderId].isForSale == true,
+            sellItems[_sellOrderId].isForSale == true,
             "This NFT has already sold or removed from selling."
         );
         require(
@@ -105,6 +132,7 @@ contract Marketplace is Ownable {
             _sellOrderId,
             _proposedPrice,
             msg.sender,
+            false,
             false
         );
 
@@ -118,5 +146,85 @@ contract Marketplace is Ownable {
         );
     }
 
-    function acceptBuyOrder() external {}
+    function acceptBuyOrder(uint256 _buyOrderId) external {
+        BuyOrder memory acceptedBuyOrder = buyOrders[_buyOrderId];
+        SellItem memory sellItem = sellItems[acceptedBuyOrder.sellOrderId];
+
+        require(
+            sellItem.nftOwner == msg.sender,
+            "This sell order is not yours!"
+        );
+
+        require(!acceptedBuyOrder.isClosed, "Outdated buy order");
+
+        require(sellItem.isForSale, "Already sold!");
+
+        ERC721(sellItem.tokenAddress).safeTransferFrom(
+            msg.sender,
+            acceptedBuyOrder.buyer,
+            sellItem.tokenId
+        );
+
+        buyOrders[_buyOrderId].isClosed = true;
+        sellItems[acceptedBuyOrder.sellOrderId].isForSale = false;
+
+        payable(msg.sender).transfer(acceptedBuyOrder.proposedPrice);
+
+        unlockAmount(acceptedBuyOrder.buyer, acceptedBuyOrder.proposedPrice);
+
+        emit Buy(
+            acceptedBuyOrder.buyer,
+            sellItem.tokenAddress,
+            sellItem.tokenId,
+            acceptedBuyOrder.proposedPrice
+        );
+
+        emit Sell(
+            sellItem.nftOwner,
+            sellItem.tokenAddress,
+            sellItem.tokenId,
+            acceptedBuyOrder.proposedPrice
+        );
+
+        emit BuyOrderAccepted(_buyOrderId);
+    }
+
+    function rejectBuyOrder(uint256 _buyOrderId) external {
+        BuyOrder memory buyOrder = buyOrders[_buyOrderId];
+        SellItem memory sellItem = sellItems[buyOrder.sellOrderId];
+
+        require(
+            sellItem.nftOwner == msg.sender,
+            "This sell order is not yours!"
+        );
+
+        require(!buyOrder.isRejected, "Buy order has already rejected.");
+
+        require(!buyOrder.isClosed, "Buy order has already closed.");
+
+        require(sellItem.isForSale, "Already sold, no reason to reject order.");
+
+        unlockAmount(buyOrder.buyer, buyOrder.proposedPrice);
+
+        buyOrders[_buyOrderId].isClosed = true;
+        buyOrders[_buyOrderId].isRejected = true;
+
+        emit BuyOrderRejected(_buyOrderId);
+    }
+
+    function retractBuyOrder(uint256 _buyOrderId) external {
+        BuyOrder memory buyOrder = buyOrders[_buyOrderId];
+
+        require(buyOrder.buyer == msg.sender, "It is not yours buy order!");
+
+        require(!buyOrder.isClosed, "Buy order has already closed!");
+
+        require(!buyOrder.isRejected, "Buy order has already rejected!");
+
+        unlockAmount(buyOrder.buyer, buyOrder.proposedPrice);
+
+        buyOrders[_buyOrderId].isClosed = true;
+
+        emit BuyOrderRetracted(_buyOrderId);
+    }
 }
