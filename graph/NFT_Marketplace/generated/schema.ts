@@ -93,3 +93,252 @@ export class ExampleEntity extends Entity {
     this.set("tokenAddress", Value.fromBytes(value));
   }
 }
+
+export class SellItem extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save SellItem entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type SellItem must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+      );
+      store.set("SellItem", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): SellItem | null {
+    return changetype<SellItem | null>(store.get_in_block("SellItem", id));
+  }
+
+  static load(id: string): SellItem | null {
+    return changetype<SellItem | null>(store.get("SellItem", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get tokenId(): BigInt {
+    let value = this.get("tokenId");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set tokenId(value: BigInt) {
+    this.set("tokenId", Value.fromBigInt(value));
+  }
+
+  get initPrice(): BigInt {
+    let value = this.get("initPrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set initPrice(value: BigInt) {
+    this.set("initPrice", Value.fromBigInt(value));
+  }
+
+  get nftOwner(): Bytes {
+    let value = this.get("nftOwner");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set nftOwner(value: Bytes) {
+    this.set("nftOwner", Value.fromBytes(value));
+  }
+
+  get tokenAddress(): Bytes {
+    let value = this.get("tokenAddress");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set tokenAddress(value: Bytes) {
+    this.set("tokenAddress", Value.fromBytes(value));
+  }
+
+  get isForSale(): boolean {
+    let value = this.get("isForSale");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isForSale(value: boolean) {
+    this.set("isForSale", Value.fromBoolean(value));
+  }
+
+  get buyOrders(): BuyOrderLoader {
+    return new BuyOrderLoader(
+      "SellItem",
+      this.get("id")!.toString(),
+      "buyOrders",
+    );
+  }
+}
+
+export class BuyOrder extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save BuyOrder entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type BuyOrder must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+      );
+      store.set("BuyOrder", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): BuyOrder | null {
+    return changetype<BuyOrder | null>(store.get_in_block("BuyOrder", id));
+  }
+
+  static load(id: string): BuyOrder | null {
+    return changetype<BuyOrder | null>(store.get("BuyOrder", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get sellOrderId(): BigInt {
+    let value = this.get("sellOrderId");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set sellOrderId(value: BigInt) {
+    this.set("sellOrderId", Value.fromBigInt(value));
+  }
+
+  get proposedPrice(): BigInt {
+    let value = this.get("proposedPrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set proposedPrice(value: BigInt) {
+    this.set("proposedPrice", Value.fromBigInt(value));
+  }
+
+  get buyer(): Bytes {
+    let value = this.get("buyer");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set buyer(value: Bytes) {
+    this.set("buyer", Value.fromBytes(value));
+  }
+
+  get isRejected(): boolean {
+    let value = this.get("isRejected");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isRejected(value: boolean) {
+    this.set("isRejected", Value.fromBoolean(value));
+  }
+
+  get isClosed(): boolean {
+    let value = this.get("isClosed");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isClosed(value: boolean) {
+    this.set("isClosed", Value.fromBoolean(value));
+  }
+
+  get sellItem(): string {
+    let value = this.get("sellItem");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set sellItem(value: string) {
+    this.set("sellItem", Value.fromString(value));
+  }
+}
+
+export class BuyOrderLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): BuyOrder[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<BuyOrder[]>(value);
+  }
+}

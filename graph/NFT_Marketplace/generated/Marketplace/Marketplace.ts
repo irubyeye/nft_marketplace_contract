@@ -210,16 +210,16 @@ export class SellItemCreated__Params {
   }
 }
 
-export class sellItemRetracted extends ethereum.Event {
-  get params(): sellItemRetracted__Params {
-    return new sellItemRetracted__Params(this);
+export class SellItemRetracted extends ethereum.Event {
+  get params(): SellItemRetracted__Params {
+    return new SellItemRetracted__Params(this);
   }
 }
 
-export class sellItemRetracted__Params {
-  _event: sellItemRetracted;
+export class SellItemRetracted__Params {
+  _event: SellItemRetracted;
 
-  constructor(event: sellItemRetracted) {
+  constructor(event: SellItemRetracted) {
     this._event = event;
   }
 

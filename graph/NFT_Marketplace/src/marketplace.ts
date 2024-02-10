@@ -9,7 +9,7 @@ import {
   OwnershipTransferred,
   Sell,
   SellItemCreated,
-  sellItemRetracted,
+  SellItemRetracted,
 } from "../generated/Marketplace/Marketplace";
 import { ExampleEntity } from "../generated/schema";
 
@@ -70,3 +70,5 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
 export function handleSell(event: Sell): void {}
 
 export function handleSellItemCreated(event: SellItemCreated): void {}
+
+export function handleSellItemRetracted(event: SellItemRetracted): void {}

@@ -58,7 +58,7 @@ contract Marketplace is Ownable {
         uint256 orderPrice
     );
 
-    event sellItemRetracted(uint256 indexed sellItemId);
+    event SellItemRetracted(uint256 indexed sellItemId);
 
     event BuyOrderAccepted(uint256 indexed buyOrderId);
 
@@ -195,7 +195,7 @@ contract Marketplace is Ownable {
 
         sellItems[_sellItemId].isForSale = false;
 
-        emit sellItemRetracted(_sellItemId);
+        emit SellItemRetracted(_sellItemId);
     }
 
     function rejectBuyOrder(uint256 _buyOrderId) external {
