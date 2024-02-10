@@ -1,4 +1,4 @@
-# NFT marketplace contract
+# NFT marketplace contract + the graph
 
 ```shell
 npx hardhat help
