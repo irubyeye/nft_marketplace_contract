@@ -4,3 +4,35 @@ type ExampleEntity @entity {
   buyer: Bytes! # address
   tokenAddress: Bytes! # address
 }
+
+type SellItem @entity {
+  id: String!
+  tokenId: BigInt!
+  initPrice: BigInt!
+  seller: Bytes!
+  tokenAddress: Bytes!
+  isForSale: Boolean!
+  buyOrders: [BuyOrder!]! @derivedFrom(field: "sellItem")
+}
+
+type BuyOrder @entity {
+  id: String!
+  sellOrderId: BigInt!
+  proposedPrice: BigInt!
+  buyer: Bytes!
+  isRejected: Boolean!
+  isClosed: Boolean!
+  sellItem: SellItem! @index
+}
+
+type Selling @entity {
+  id: String!
+  sellItems: [SellItem!]!
+  orderPrice: BigInt!
+}
+
+type Buying @entity {
+  id: String!
+  boughtItems: [SellItem!]!
+  orderPrice: BigInt!
+}

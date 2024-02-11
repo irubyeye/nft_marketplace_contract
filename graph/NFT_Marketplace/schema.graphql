@@ -9,7 +9,7 @@ type SellItem @entity {
   id: String!
   tokenId: BigInt!
   initPrice: BigInt!
-  nftOwner: Bytes!
+  seller: Bytes!
   tokenAddress: Bytes!
   isForSale: Boolean!
   buyOrders: [BuyOrder!]! @derivedFrom(field: "sellItem")
@@ -23,4 +23,16 @@ type BuyOrder @entity {
   isRejected: Boolean!
   isClosed: Boolean!
   sellItem: SellItem! @index
+}
+
+type Selling @entity {
+  id: String!
+  sellItems: [SellItem!]!
+  orderPrice: BigInt!
+}
+
+type Buying @entity {
+  id: String!
+  boughtItems: [SellItem!]!
+  orderPrice: BigInt!
 }

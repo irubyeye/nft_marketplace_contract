@@ -37,14 +37,8 @@
       },
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      },
-      {
-        "indexed": true,
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "sellItemId",
         "type": "uint256"
       },
       {
@@ -157,14 +151,8 @@
       },
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      },
-      {
-        "indexed": true,
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "sellItemId",
         "type": "uint256"
       },
       {

@@ -46,15 +46,13 @@ contract Marketplace is Ownable {
 
     event Buy(
         address indexed buyer,
-        address indexed tokenAddress,
-        uint256 indexed tokenId,
+        uint256 indexed sellItemId,
         uint256 orderPrice
     );
 
     event Sell(
         address indexed seller,
-        address indexed tokenAddress,
-        uint256 indexed tokenId,
+        uint256 indexed sellItemId,
         uint256 orderPrice
     );
 
@@ -171,15 +169,13 @@ contract Marketplace is Ownable {
 
         emit Buy(
             acceptedBuyOrder.buyer,
-            sellItem.tokenAddress,
-            sellItem.tokenId,
+            sellItem.proposalId,
             acceptedBuyOrder.proposedPrice
         );
 
         emit Sell(
             sellItem.nftOwner,
-            sellItem.tokenAddress,
-            sellItem.tokenId,
+            sellItem.proposalId,
             acceptedBuyOrder.proposedPrice
         );
 

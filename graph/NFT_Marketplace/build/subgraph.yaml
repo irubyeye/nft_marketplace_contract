@@ -28,7 +28,7 @@ dataSources:
         - name: Marketplace
           file: Marketplace/abis/Marketplace.json
       eventHandlers:
-        - event: Buy(indexed address,indexed address,indexed uint256,uint256)
+        - event: Buy(indexed address,indexed uint256,uint256)
           handler: handleBuy
         - event: BuyOrderAccepted(indexed uint256)
           handler: handleBuyOrderAccepted
@@ -40,8 +40,10 @@ dataSources:
           handler: handleBuyOrderRetracted
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
-        - event: Sell(indexed address,indexed address,indexed uint256,uint256)
+        - event: Sell(indexed address,indexed uint256,uint256)
           handler: handleSell
         - event: SellItemCreated(indexed address,indexed address,indexed uint256,uint256,uint256)
           handler: handleSellItemCreated
+        - event: SellItemRetracted(indexed uint256)
+          handler: handleSellItemRetracted
       file: Marketplace/Marketplace.wasm
