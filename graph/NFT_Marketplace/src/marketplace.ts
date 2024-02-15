@@ -10,6 +10,7 @@ import {
   SellItemCreated,
   SellItemRetracted,
 } from "../generated/Marketplace/Marketplace";
+import { Nft } from "../generated/Marketplace/Nft";
 import { SellItem, BuyOrder, Selling, Buying } from "../generated/schema";
 
 export function handleBuy(event: Buy): void {
@@ -61,7 +62,7 @@ export function handleBuyOrderRetracted(event: BuyOrderRetracted): void {
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
 
 export function handleSell(event: Sell): void {
-  let entity = Selling.load(seed.toString());
+  let entity = Selling.load(event.params.seller.toString());
 
   if (!entity) {
     entity = new Selling(event.params.seller.toString());
@@ -83,6 +84,10 @@ export function handleSellItemCreated(event: SellItemCreated): void {
   entity.initPrice = event.params.initPrice;
   entity.seller = event.params.seller;
   entity.isForSale = true;
+
+  let nft = Nft.bind(event.params.tokenAddress);
+
+  entity.uri = nft.tokenURI(event.params.tokenId);
 
   entity.save();
 }

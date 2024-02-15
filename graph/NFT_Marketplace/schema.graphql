@@ -1,16 +1,10 @@
-type ExampleEntity @entity {
-  id: Bytes!
-  count: BigInt!
-  buyer: Bytes! # address
-  tokenAddress: Bytes! # address
-}
-
 type SellItem @entity {
   id: String!
   tokenId: BigInt!
   initPrice: BigInt!
   seller: Bytes!
   tokenAddress: Bytes!
+  uri: String!
   isForSale: Boolean!
   buyOrders: [BuyOrder!]! @derivedFrom(field: "sellItem")
 }
