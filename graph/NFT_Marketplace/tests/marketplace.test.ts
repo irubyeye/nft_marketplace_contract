@@ -7,8 +7,6 @@ import {
   afterAll,
 } from "matchstick-as/assembly/index";
 import { Address, BigInt } from "@graphprotocol/graph-ts";
-import { ExampleEntity } from "../generated/schema";
-import { Buy } from "../generated/Marketplace/Marketplace";
 import { handleBuy } from "../src/marketplace";
 import { createBuyEvent } from "./marketplace-utils";
 
