@@ -47,7 +47,7 @@ contract Marketplace is Ownable {
     event Buy(
         address indexed buyer,
         uint256 indexed sellItemId,
-        uint256 orderPrice
+        uint256 orderPrice,
     );
 
     event Sell(

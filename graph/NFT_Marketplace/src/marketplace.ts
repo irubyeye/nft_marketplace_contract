@@ -25,6 +25,13 @@ export function handleBuy(event: Buy): void {
 
   entity.orderPrice = event.params.orderPrice;
 
+  let boughtItem = SellItem.load(event.params.sellItemId.toString());
+
+  if (boughtItem) {
+    boughtItem.isForSale = false;
+    boughtItem.save();
+  }
+
   entity.save();
 }
 
